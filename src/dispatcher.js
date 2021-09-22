@@ -211,7 +211,21 @@ export default class Dispatcher {
       this.switchContext.events = ['switch', 'blur', 'focus', 'cursor']
       this.notify('switch', element, direction, cursor)
     }
-  }
+
+    if (direction === 'left' && cursor.isAtBeginning()) {
+      event.preventDefault()
+      event.stopPropagation()
+      this.switchContext.events = ['switch', 'blur', 'focus', 'cursor']
+      this.notify('switch', element, 'left', cursor)
+    }
+
+    if (direction === 'right' && cursor.isAtTextEnd()) {
+      event.preventDefault()
+      event.stopPropagation()
+      this.switchContext.events = ['switch', 'blur', 'focus', 'cursor']
+      this.notify('switch', element, 'right', cursor)
+    }
+}
 
   /**
   * Sets up listener for keydown event which forwards events to
@@ -244,6 +258,14 @@ export default class Dispatcher {
 
       .on('down', function (event) {
         self.dispatchSwitchEvent(event, this, 'down')
+      })
+
+      .on('left', function (event) {
+        self.dispatchSwitchEvent(event, this, 'left')
+      })
+
+      .on('right', function (event) {
+        self.dispatchSwitchEvent(event, this, 'right')
       })
 
       .on('backspace', function (event) {

@@ -74,7 +74,6 @@ export default class SelectionWatcher {
   */
   getFreshSelection () {
     const range = this.getRangeContainer()
-
     return range.isCursor
       ? range.getCursor(this.win)
       : range.getSelection(this.win)

@@ -5,6 +5,7 @@ import * as content from './content'
 import * as parser from './parser'
 import * as string from './util/string'
 import {elementNode, documentFragmentNode} from './node-type'
+import {textNodesUnder, getAbsoluteOffset} from './util/element'
 import error from './util/error'
 import * as rangeSaveRestore from './range-save-restore'
 // import printRange from './util/print_range'
@@ -33,6 +34,15 @@ export default class Cursor {
     this.setHost(editableHost)
     this.range = rangyRange
     this.isCursor = true
+  }
+
+  // Returns the absolute (cumulative) offset of this cursor within the
+  // contenteditable host.
+  //
+  // @return {int}
+  getAbsoluteOffset () {
+    const textNodes = textNodesUnder(this.host)
+    return getAbsoluteOffset(textNodes, this.range.startContainer, this.range.startOffset)
   }
 
   // Get all tags that affect the current selection. Optionally pass a

@@ -24,6 +24,27 @@ export function getTextNodeAndRelativeOffset ({textNodes, absOffset}) {
   return {node: targetNode, relativeOffset}
 }
 
+// Returns the absolute (cumulative) offset of node+nodeOffset
+// within an array of textNodes.
+// If node is not found in the textNodes array, returns -1.
+export function getAbsoluteOffset (textNodes, node, nodeOffset) {
+  let cumulativeOffset = 0
+  let found = false
+  for (let i = 0; i < textNodes.length; i++) {
+    const textNode = textNodes[i]
+    if (textNode === node) {
+      cumulativeOffset += nodeOffset
+      found = true
+      break
+    }
+    cumulativeOffset += textNode.textContent.length
+  }
+  if (!found) {
+    return -1
+  }
+  return cumulativeOffset
+}
+
 export function getTotalCharCount (element) {
   const textNodes = textNodesUnder(element)
   const reducer = (acc, node) => acc + node.textContent.length
